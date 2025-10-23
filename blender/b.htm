@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene vr-mode-ui="enabled: true">
+      <!-- モデル読み込み -->
+      <a-entity gltf-model="heya2.glb" position="0 0 0" scale="1 1 1"></a-entity>
+
+      <!-- カメラとコントローラー -->
+      <a-entity camera look-controls wasd-controls position="0 1.6 2"></a-entity>
+    </a-scene>
+  </body>
+</html>
