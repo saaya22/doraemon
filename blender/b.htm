@@ -49,10 +49,11 @@
       ></a-box>
 
       <!-- カメラとコントローラー -->
-      <a-entity camera look-controls wasd-controls position="0 1.6 2"></a-entity>
-      <a-entity laser-controls="hand: right"></a-entity>
-      <a-entity laser-controls="hand: left"></a-entity>
-      <a-entity id="ctlR" laser-controls="hand: right" raycaster="lineColor: red;"></a-entity>
+      <a-entity
+        id="ctlR"
+        laser-controls="hand: right"
+        raycaster="objects: .clickable; showLine: true; lineColor: red;"
+      ></a-entity>
     </a-scene>
 
     <script>
