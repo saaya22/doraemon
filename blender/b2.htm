@@ -16,27 +16,28 @@
 
       <!-- Blenderで作った部屋 -->
       <a-entity gltf-model="heya_new.glb" position="0 1 -0.5" scale="1.2 1.2 1.2"></a-entity>
+      
+      
+      
 
       <!-- 色が変わる箱 -->
-      <a-box
-		  id="box1"
-		  class="clickable"
-		  position="-1.2 0.8 -0.3"
-		  depth="0.1"
-		  height="0.1"
-		  width="0.1"
-		  color="red"
-		></a-box>
+      <a-entity
+	  id="box1"
+	  class="clickable"
+	  gltf-model="dora.glb"
+	  position="-1.2 0.8 -0.3"
+	  scale="0.3 0.3 0.3"
+	  rotation="0 90 0"
+	></a-entity>
 		
-		<a-box
-        id="box2"
-        class="clickable"
-        position="-0.3 0.4 -1"
-        depth="0.1"
-        height="0.1"
-        width="0.1"
-        color="blue"
-      ></a-box>
+		<a-entity
+	  id="box2"
+	  class="clickable"
+	  gltf-model="door.glb"
+	  position="-0.3 0.8 -1"
+	  scale="0.5 0.5 0.5"
+	  rotation="0 270 0"
+	></a-entity>
       
       <a-box
         id="box3"
@@ -60,16 +61,28 @@
 
     <script>
       // jQueryでクリック時の色変更
-      $('#box1').on('click', function () {
-        const currentColor = $(this).attr('color');
-        const newColor = currentColor === 'red' ? 'yellow' : 'red';
-        $(this).attr('color', newColor);
-      });
+      //$('#box1').on('click', function () {
+        //const currentColor = $(this).attr('color');
+        //const newColor = currentColor === 'red' ? 'yellow' : 'red';
+        //$(this).attr('color', newColor);
+      //});
       
-      $('#box2').on('click', function () {
-        const color = $(this).attr('color') === 'blue' ? 'green' : 'blue';
-        $(this).attr('color', color);
-      });
+      //$('#box2').on('click', function () {
+        //const color = $(this).attr('color') === 'blue' ? 'green' : 'blue';
+        //$(this).attr('color', color);
+      //});
+      
+      $('#box1').on('click', function () {
+		  let scale = $(this).attr('scale').split(" ");
+		  let newScale = `${scale[0] * 1.2} ${scale[1] * 1.2} ${scale[2] * 1.2}`;
+		  $(this).attr('scale', newScale);
+		  
+		  $('#box2').on('click', function () {
+		  let scale = $(this).attr('scale').split(" ");
+		  let newScale = `${scale[0] * 1.2} ${scale[1] * 1.2} ${scale[2] * 1.2}`;
+		  $(this).attr('scale', newScale);
+		});
+	});
       
       $('#box3').on('click', function () {
         const color = $(this).attr('color') === 'orange' ? 'pink' : 'orange';
