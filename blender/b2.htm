@@ -10,82 +10,92 @@
   <body>
     <a-scene
       vr-mode-ui="enabled: true"
-      cursor="rayOrigin: mouse"    <!-- マウスクリック対応 -->
+      cursor="rayOrigin: mouse"
       raycaster="objects: .clickable"
     >
 
-      <!-- Blenderで作った部屋 -->
+      <!-- 部屋 -->
       <a-entity gltf-model="heya_new.glb" position="0 1.5 -0.5" scale="1.2 1.2 1.2"></a-entity>
-      
-      
-      
 
-      <!-- 色が変わる箱 -->
+      <!-- ドラえもん -->
       <a-entity
-	  id="box1"
-	  class="clickable"
-	  gltf-model="dora.glb"
-	  position="-1.2 1.1 -0.3"
-	  scale="0.2 0.2 0.2"
-	  rotation="0 90 0"
-	></a-entity>
-		
-		<a-entity
-	  id="box2"
-	  class="clickable"
-	  gltf-model="door.glb"
-	  position="-0.7 1.3 -1.4"
-	  scale="0.5 0.5 0.5"
-	  rotation="0 220 0"
-	></a-entity>
-      
-      <a-box
+        id="box1"
+        class="clickable"
+        gltf-model="dora.glb"
+        position="-1.2 1.1 -0.3"
+        scale="0.2 0.2 0.2"
+        rotation="0 90 0"
+      ></a-entity>
+
+      <!-- どこでもドア -->
+      <a-entity
+        id="box2"
+        class="clickable"
+        gltf-model="door.glb"
+        position="-0.7 1.3 -1.4"
+        scale="0.5 0.5 0.5"
+        rotation="0 220 0"
+      ></a-entity>
+
+      <!-- ビッグライト -->
+      <a-entity
         id="box3"
         class="clickable"
         gltf-model="b.glb"
         position="-0.3 0.9 -0.4"
         scale="0.1 0.1 0.1"
-	  rotation="0 0 0"
-      ></a-box>
-      
+        rotation="0 0 0"
+      ></a-entity>
+
+      <!-- UIパネル（最初は非表示） -->
+      <a-entity id="menu" visible="false" position="0 1.3 -0.8">
+        <a-plane color="#222" width="1.2" height="0.6" opacity="0.8"></a-plane>
+        <a-text id="menuTitle" value="" align="center" position="0 0.18 0" width="1.2"></a-text>
+        <a-box id="btnUse" class="menuBtn" color="#4CAF50" depth="0.05" height="0.18" width="0.4" position="-0.3 -0.1 0"></a-box>
+        <a-text value="使用する" position="-0.3 -0.1 0.03" align="center"></a-text>
+        <a-box id="btnBack" class="menuBtn" color="#E53935" depth="0.05" height="0.18" width="0.4" position="0.3 -0.1 0"></a-box>
+        <a-text value="戻る" position="0.3 -0.1 0.03" align="center"></a-text>
+      </a-entity>
+
+      <!-- カメラ -->
       <a-entity camera look-controls wasd-controls position="0 1.0 -1"></a-entity>
 
-      <!-- カメラとコントローラー -->
-      <a-entity
-        id="ctlR"
-        laser-controls="hand: right"
-        raycaster="objects: .clickable; showLine: true; lineColor: red;"
-      ></a-entity>
+      <!-- VRコントローラー -->
+      <a-entity id="ctlR" laser-controls="hand: right" raycaster="objects: .clickable, .menuBtn; showLine: true; lineColor: red;"></a-entity>
     </a-scene>
 
     <script>
-      // jQueryでクリック時の色変更
-      //$('#box1').on('click', function () {
-        //const currentColor = $(this).attr('color');
-        //const newColor = currentColor === 'red' ? 'yellow' : 'red';
-        //$(this).attr('color', newColor);
-      //});
-      
-      //$('#box2').on('click', function () {
-        //const color = $(this).attr('color') === 'blue' ? 'green' : 'blue';
-        //$(this).attr('color', color);
-      //});
-      
-      $('#box1').on('click', function () {
-		  let scale = $(this).attr('scale').split(" ");
-		  let newScale = `${scale[0] * 1.2} ${scale[1] * 1.2} ${scale[2] * 1.2}`;
-		  $(this).attr('scale', newScale);
-		  
-		  $('#box2').on('click', function () {
-		  let scale = $(this).attr('scale').split(" ");
-		  let newScale = `${scale[0] * 1.2} ${scale[1] * 1.2} ${scale[2] * 1.2}`;
-		  $(this).attr('scale', newScale);
-		});
-	});
-      
-      $('#box3').on('click', function () {
-        const color = $(this).attr('color') === 'orange' ? 'pink' : 'orange';
-        $(this).attr('color', color);
+      let currentObject = null;
+
+      // ドア or ビッグライトをクリック → メニューを表示
+      $('#box2, #box3').on('click', function () {
+        currentObject = this.id;
+        $('#menuTitle').attr('value',
+          currentObject === 'box2'
+            ? 'どこでもドア'
+            : 'ビッグライト'
+        );
+        $('#menu').attr('visible', true);
+      });
+
+      // 使用する → 実行処理
+      $('#btnUse').on('click', function () {
+        if (!currentObject) return;
+
+        if (currentObject === 'box2') {
+          alert("どこでもドアを使用！");
+          // ← ここにワープ処理など追加
+        }
+        if (currentObject === 'box3') {
+          alert("ビッグライトを使用！");
+          // ← ここに巨大化処理など追加
+        }
+        $('#menu').attr('visible', false);
+      });
+
+      // 戻る → メニューを閉じる
+      $('#btnBack').on('click', function () {
+        $('#menu').attr('visible', false);
       });
     </script>
   </body>
