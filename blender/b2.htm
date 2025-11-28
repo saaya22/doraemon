@@ -63,37 +63,47 @@
 		  </a-text>
 
 		  <!-- 使用するボタン -->
-		<a-entity position="-0.33 -0.12 0">
-		  <!-- ボタン画像 -->
-		  <a-image id="btnUse" class="menuBtn"
-		           src="siyou.png"
-		           width="0.55" height="0.18"
-		           position="0 0 0"></a-image>
+		  <a-entity position="-0.33 -0.12 0">
+		    <a-box
+		        id="btnUse"
+		        class="menuBtn"
+		        color="#4CAF50"
+		        depth="0.05"
+		        height="0.18"
+		        width="0.55"
+		        position="0 0 0">
+		    </a-box>
 
-		  <!-- 文字を重ねる -->
-		  <a-text value="使用する"
-		          align="center"
-		          position="0 0 0.06"
-		          width="1.2"
-		          color="#FFF"></a-text>
+		    <a-text
+		        value="使用する"
+		        align="center"
+		        position="0 0 0.06"
+		        width="1.2"
+		        color="#FFF">
+		    </a-text>
+		  </a-entity>
+
+		  <!-- 戻るボタン -->
+		  <a-entity position="0.33 -0.12 0">
+		    <a-box
+		        id="btnBack"
+		        class="menuBtn"
+		        color="#E53935"
+		        depth="0.05"
+		        height="0.18"
+		        width="0.55"
+		        position="0 0 0">
+		    </a-box>
+
+		    <a-text
+		        value="戻る"
+		        align="center"
+		        position="0 0 0.06"
+		        width="1.2"
+		        color="#FFF">
+		    </a-text>
+		  </a-entity>
 		</a-entity>
-
-		<!-- 戻るボタン -->
-		<a-entity position="0.33 -0.12 0">
-		  <!-- ボタン画像 -->
-		  <a-image id="btnBack" class="menuBtn"
-		           src="modo.png"
-		           width="0.55" height="0.18"
-		           position="0 0 0"></a-image>
-
-		  <!-- 文字 -->
-		  <a-text value="戻る"
-		          align="center"
-		          position="0 0 0.06"
-		          width="1.2"
-		          color="#FFF"></a-text>
-		</a-entity>
-
 
       <!-- カメラ -->
       <a-entity camera look-controls wasd-controls position="0 1.0 -1"></a-entity>
