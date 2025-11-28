@@ -27,14 +27,7 @@
         rotation="0 90 0"
       ></a-entity>
       
-      <!-- 南極シーン（ドアの先に置く） -->
-		<a-entity id="nantarctica"
-		          gltf-model="nan.glb"
-		          position="-2.2 1.3 -3.5"
-		          scale="2 2 2"
-		          rotation="0 220 0">
-		</a-entity>
-
+      
 
       <!-- どこでもドア -->
       <a-entity
@@ -70,55 +63,31 @@
 		  </a-text>
 
 		  <!-- 使用するボタン -->
-		  <a-entity position="-0.33 -0.12 0">
-		    <a-box
-		        id="btnUse"
-		        class="menuBtn"
-		        color="#4CAF50"
-		        depth="0.05"
-		        height="0.18"
-		        width="0.55"
-		        position="0 0 0">
-		    </a-box>
+		<a-entity position="-0.33 -0.12 0">
+		  <!-- ボタン画像 -->
+		  <a-image id="btnUse" class="menuBtn"
+		           src="../png/siyou.png"
+		           width="0.55" height="0.18"
+		           position="0 0 0"></a-image>
 
-		    <a-text
-		        value="使用する"
-		        align="center"
-		        position="0 0 0.06"
-		        width="1.2"
-		        color="#FFF">
-		    </a-text>
-		  </a-entity>
+		<!-- 戻るボタン -->
+		<a-entity position="0.33 -0.12 0">
+		  <!-- ボタン画像 -->
+		  <a-image id="btnBack" class="menuBtn"
+		           src="../png/modo.png"
+		           width="0.55" height="0.18"
+		           position="0 0 0"></a-image>
 
-		  <!-- 戻るボタン -->
-		  <a-entity position="0.33 -0.12 0">
-		    <a-box
-		        id="btnBack"
-		        class="menuBtn"
-		        color="#E53935"
-		        depth="0.05"
-		        height="0.18"
-		        width="0.55"
-		        position="0 0 0">
-		    </a-box>
-
-		    <a-text
-		        value="戻る"
-		        align="center"
-		        position="0 0 0.06"
-		        width="1.2"
-		        color="#FFF">
-		    </a-text>
-		  </a-entity>
 		</a-entity>
 
-      <!-- カメラ -->
-      <a-entity camera look-controls wasd-controls position="0 1.0 -1"></a-entity>
 
-      <!-- VRコントローラー -->
-      <a-entity id="ctlR" laser-controls="hand: right"
-                raycaster="objects: .clickable, .menuBtn; showLine: true;">
-      </a-entity>
+		      <!-- カメラ -->
+		      <a-entity camera look-controls wasd-controls position="0 1.0 -1"></a-entity>
+
+		      <!-- VRコントローラー -->
+		      <a-entity id="ctlR" laser-controls="hand: right"
+		                raycaster="objects: .clickable, .menuBtn; showLine: true;">
+		      </a-entity>
     </a-scene>
 
     <script>
