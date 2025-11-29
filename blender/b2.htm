@@ -48,6 +48,18 @@
         rotation="0 220 0"
         visible="false">
       </a-entity>
+      
+      <!-- ドアの向こう側の景色（富士山） -->
+		<a-plane
+		  id="fujiPlane"
+		  src="../png/fuji.jpeg"
+		  position="-0.7 1.3 -2.1"
+		  width="1.6"
+		  height="1.6"
+		  rotation="0 40 0"
+		  visible="false">
+		</a-plane>
+
 
       <!-- ビッグライト -->
       <a-entity
@@ -139,6 +151,10 @@
 
           // 開いたドアを表示
           $('#openDoor').attr('visible', true);
+          
+          // 富士山の画像を表示
+		  $('#fujiPlane').attr('visible', true);
+
 
           // ここにワープ処理を追加してもOK！
           // alert("どこでもドアを使用！");
