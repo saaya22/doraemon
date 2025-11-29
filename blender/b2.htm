@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -25,31 +24,31 @@
         gltf-model="dora.glb"
         position="-1.2 1.1 -0.3"
         scale="0.2 0.2 0.2"
-        rotation="0 90 0"
-      ></a-entity>
-      
-      <!-- しまってるどこでもドア -->
+        rotation="0 90 0">
+      </a-entity>
+
+      <!-- しまってるどこでもドア（初期表示：true）-->
       <a-entity
-        id="box2"
+        id="closedDoor"
         class="clickable"
         gltf-model="../cdoor.glb"
         position="-0.7 1.3 -1.4"
         scale="0.5 0.5 0.5"
         rotation="0 220 0"
-      ></a-entity>
+        visible="true">
+      </a-entity>
 
-
-      <!-- どこでもドア -->
+      <!-- 開いてるどこでもドア（初期表示：false）-->
       <a-entity
-        id="box2"
+        id="openDoor"
         class="clickable"
         gltf-model="door.glb"
         position="-0.7 1.3 -1.4"
         scale="0.5 0.5 0.5"
         rotation="0 220 0"
-      ></a-entity>
-      
-      
+        visible="false">
+      </a-entity>
+
       <!-- ビッグライト -->
       <a-entity
         id="box3"
@@ -57,66 +56,52 @@
         gltf-model="b.glb"
         position="-0.3 0.9 -0.4"
         scale="0.1 0.1 0.1"
-        rotation="0 0 0"
-      ></a-entity>
+        rotation="0 0 0">
+      </a-entity>
 
       <!-- UIパネル -->
-		<a-entity id="menu" visible="false" position="-0.3 1.3 -0.8">
-		  <a-plane color="#222" width="1.2" height="0.6" opacity="0.85"></a-plane>
+      <a-entity id="menu" visible="false" position="-0.3 1.3 -0.8">
+        <a-plane color="#222" width="1.2" height="0.6" opacity="0.85"></a-plane>
 
-		  <!-- タイトル -->
-		  <a-text id="menuTitle"
-		          value=""
-		          align="center"
-		          position="0 0.20 0.05"
-		          width="1.0"
-		          color="#FFF">
-		  </a-text>
+        <!-- タイトル -->
+        <a-text id="menuTitle"
+                value=""
+                align="center"
+                position="0 0.20 0.05"
+                width="1.0"
+                color="#FFF">
+        </a-text>
 
-		  <!-- 使用するボタン -->
-		  <a-entity position="-0.33 -0.12 0">
-		    <a-box
-		        id="btnUse"
-		        class="menuBtn"
-		        color="#4CAF50"
-		        depth="0.05"
-		        height="0.144"
-		        width="0.44"
-		        position="0 0 0">
-		        
-		        
-		        <a-image 
-			      src="../png/siyou.PNG"  
-			      width="0.44" 
-			      height="0.16"
-			      position="0 0 0.03">  <!-- 表面より少し前 -->
-			    </a-image>
-  
-		    </a-box>
+        <!-- 使用するボタン -->
+        <a-entity position="-0.33 -0.12 0">
+          <a-box id="btnUse" class="menuBtn"
+                 color="#4CAF50"
+                 depth="0.05" height="0.144" width="0.44">
 
-		  </a-entity>
+            <a-image src="../png/siyou.PNG"
+                     width="0.44"
+                     height="0.16"
+                     position="0 0 0.03">
+            </a-image>
 
-		  <!-- 戻るボタン -->
-		  <a-entity position="0.33 -0.12 0">
-		    <a-box
-		        id="btnBack"
-		        class="menuBtn"
-		        color="#E53935"
-		        depth="0.05"
-		        height="0.144"
-		        width="0.44"
-		        position="-0.1 0 0">
-		        
-		         <a-image 
-			      src="../png/modo.PNG"
-			      width="0.44" 
-			      height="0.16"
-			      position="-0.1 0 0.03">
-			    </a-image>
-		    </a-box>
+          </a-box>
+        </a-entity>
 
-		  </a-entity>
-		</a-entity>
+        <!-- 戻るボタン -->
+        <a-entity position="0.33 -0.12 0">
+          <a-box id="btnBack" class="menuBtn"
+                 color="#E53935"
+                 depth="0.05" height="0.144" width="0.44">
+
+            <a-image src="../png/modo.PNG"
+                     width="0.44"
+                     height="0.16"
+                     position="0 0 0.03">
+            </a-image>
+
+          </a-box>
+        </a-entity>
+      </a-entity>
 
       <!-- カメラ -->
       <a-entity camera look-controls wasd-controls position="0 1.0 -1"></a-entity>
@@ -130,14 +115,16 @@
     <script>
       let currentObject = null;
 
-      // ドア or ビッグライトをクリック → メニューを表示
-      $('#box2, #box3').on('click', function () {
+      // しまってるドア or ビッグライト → メニュー表示
+      $('#closedDoor, #box3').on('click', function () {
         currentObject = this.id;
+
         $('#menuTitle').attr('value',
-          currentObject === 'box2'
+          currentObject === 'closedDoor'
             ? 'どこでもドア'
             : 'ビッグライト'
         );
+
         $('#menu').attr('visible', true);
       });
 
@@ -145,14 +132,24 @@
       $('#btnUse').on('click', function () {
         if (!currentObject) return;
 
-        if (currentObject === 'box2') {
-          alert("どこでもドアを使用！");
-          // ワープ処理ここ
+        // ▼▼ ドアの場合 ▼▼
+        if (currentObject === 'closedDoor') {
+          // 閉じたドアを消す
+          $('#closedDoor').attr('visible', false);
+
+          // 開いたドアを表示
+          $('#openDoor').attr('visible', true);
+
+          // ここにワープ処理を追加してもOK！
+          // alert("どこでもドアを使用！");
         }
+
+        // ▼▼ ビッグライトの場合 ▼▼
         if (currentObject === 'box3') {
           alert("ビッグライトを使用！");
           // 巨大化処理ここ
         }
+
         $('#menu').attr('visible', false);
       });
 
