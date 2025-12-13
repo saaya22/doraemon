@@ -11,146 +11,184 @@
     <a-scene
       vr-mode-ui="enabled: true"
       cursor="rayOrigin: mouse"
-      raycaster="objects: .clickable"
+      raycaster="objects: .clickable, .menuBtn"
     >
 
-      <!-- 部屋 -->
-      <a-entity gltf-model="heya_new.glb"
-                position="0 1.5 -0.5"
-                scale="1.2 1.2 1.2">
+      <!-- ===== 部屋全体の親（ビッグライト用） ===== -->
+      <a-entity id="roomRoot" scale="1 1 1">
+
+        <!-- 部屋 -->
+        <a-entity
+          gltf-model="heya_new.glb"
+          position="0 1.5 -0.5"
+          scale="1.2 1.2 1.2">
+        </a-entity>
+
+        <!-- ドラえもん -->
+        <a-entity
+          id="box1"
+          class="clickable"
+          gltf-model="dora.glb"
+          position="-1.2 1.1 -0.3"
+          scale="0.2 0.2 0.2"
+          rotation="0 90 0">
+        </a-entity>
+
+        <!-- 閉じたどこでもドア -->
+        <a-entity
+          id="closedDoor"
+          class="clickable"
+          gltf-model="../cdoor.glb"
+          position="-0.7 1.3 -1.4"
+          scale="0.5 0.5 0.5"
+          rotation="0 400 0"
+          visible="true">
+        </a-entity>
+
+        <!-- 開いたどこでもドア -->
+        <a-entity
+          id="openDoor"
+          class="clickable"
+          gltf-model="door.glb"
+          position="-0.7 1.3 -1.4"
+          scale="0.5 0.5 0.5"
+          rotation="0 220 0"
+          visible="false">
+        </a-entity>
+
+        <!-- ドアの向こう（富士山） -->
+        <a-plane
+          id="fujiPlane"
+          src="../png/fuji.jpeg"
+          position="-0.7 1.3 -1.5"
+          width="0.7"
+          height="1"
+          visible="false">
+        </a-plane>
+
+        <!-- ビッグライト -->
+        <a-entity
+          id="box3"
+          class="clickable"
+          gltf-model="b.glb"
+          position="-0.3 0.9 -0.4"
+          scale="0.1 0.1 0.1">
+        </a-entity>
+
       </a-entity>
 
-      <!-- ドラえもん -->
-      <a-entity
-        id="box1"
-        class="clickable"
-        gltf-model="dora.glb"
-        position="-1.2 1.1 -0.3"
-        scale="0.2 0.2 0.2"
-        rotation="0 90 0">
-      </a-entity>
-
-      <!-- しまってるどこでもドア -->
-      <a-entity
-        id="closedDoor"
-        class="clickable"
-        gltf-model="../cdoor.glb"
-        position="-0.7 1.3 -1.4"
-        scale="0.5 0.5 0.5"
-        rotation="0 400 0"
-        visible="true">
-      </a-entity>
-
-      <!-- 開いてるどこでもドア -->
-      <a-entity
-        id="openDoor"
-        class="clickable"
-        gltf-model="door.glb"
-        position="-0.7 1.3 -1.4"
-        scale="0.5 0.5 0.5"
-        rotation="0 220 0"
-        visible="false">
-      </a-entity>
-
-      <!-- 富士山 -->
-      <a-plane
-        id="fujiPlane"
-        src="../png/fuji.jpeg"
-        position="-0.7 1.3 -1.5"
-        width="0.7"
-        height="1"
-        visible="false">
-      </a-plane>
-
-      <!-- ビッグライト -->
-      <a-entity
-        id="box3"
-        class="clickable"
-        gltf-model="b.glb"
-        position="-0.3 0.9 -0.4"
-        scale="0.1 0.1 0.1">
-      </a-entity>
-
-      <!-- UI -->
+      <!-- ===== UIメニュー ===== -->
       <a-entity id="menu" visible="false" position="-0.3 1.3 -0.8">
         <a-plane color="#222" width="1.2" height="0.6" opacity="0.85"></a-plane>
 
-        <a-text id="menuTitle"
-                align="center"
-                position="0 0.20 0.05"
-                width="1.0"
-                color="#FFF">
+        <a-text
+          id="menuTitle"
+          value=""
+          align="center"
+          position="0 0.2 0.05"
+          width="1"
+          color="#FFF">
         </a-text>
 
+        <!-- 使用する -->
         <a-entity position="-0.33 -0.12 0">
-          <a-box id="btnUse" class="menuBtn"
-                 color="#4CAF50"
-                 depth="0.05" height="0.144" width="0.44">
-            <a-image src="../png/siyou.PNG"
-                     width="0.44"
-                     height="0.16"
-                     position="0 0 0.03">
+          <a-box
+            id="btnUse"
+            class="menuBtn"
+            color="#4CAF50"
+            depth="0.05"
+            height="0.144"
+            width="0.44">
+            <a-image
+              src="../png/siyou.PNG"
+              width="0.44"
+              height="0.16"
+              position="0 0 0.03">
             </a-image>
           </a-box>
         </a-entity>
 
+        <!-- 戻る -->
         <a-entity position="0.33 -0.12 0">
-          <a-box id="btnBack" class="menuBtn"
-                 color="#E53935"
-                 depth="0.05" height="0.144" width="0.44">
-            <a-image src="../png/modo.PNG"
-                     width="0.44"
-                     height="0.16"
-                     position="0 0 0.03">
+          <a-box
+            id="btnBack"
+            class="menuBtn"
+            color="#E53935"
+            depth="0.05"
+            height="0.144"
+            width="0.44">
+            <a-image
+              src="../png/modo.PNG"
+              width="0.44"
+              height="0.16"
+              position="0 0 0.03">
             </a-image>
           </a-box>
         </a-entity>
       </a-entity>
 
-      <!-- 🔥 カメラ（id追加） -->
+      <!-- ===== カメラ ===== -->
       <a-entity
-        id="playerCamera"
+        id="camera"
         camera
         look-controls
         wasd-controls
         position="0 1.0 -1">
       </a-entity>
 
-      <!-- コントローラー -->
-      <a-entity laser-controls="hand: right"
-                raycaster="objects: .clickable, .menuBtn; showLine: true;">
+      <!-- VRコントローラ -->
+      <a-entity
+        laser-controls="hand: right"
+        raycaster="objects: .clickable, .menuBtn; showLine: true">
       </a-entity>
+
     </a-scene>
 
+    <!-- ===== JS ===== -->
     <script>
       let currentObject = null;
+      let bigLightUsed = false;
 
+      // オブジェクトクリック → メニュー表示
       $('#closedDoor, #box3').on('click', function () {
         currentObject = this.id;
+
         $('#menuTitle').attr(
           'value',
-          currentObject === 'closedDoor' ? 'どこでもドア' : 'ビッグライト'
+          currentObject === 'closedDoor'
+            ? 'どこでもドア'
+            : 'ビッグライト'
         );
+
         $('#menu').attr('visible', true);
       });
 
+      // 使用する
       $('#btnUse').on('click', function () {
         if (!currentObject) return;
 
+        // どこでもドア
         if (currentObject === 'closedDoor') {
           $('#closedDoor').attr('visible', false);
           $('#openDoor').attr('visible', true);
           $('#fujiPlane').attr('visible', true);
         }
 
-        // 🔥 ビッグライト処理
-        if (currentObject === 'box3') {
-          $('#playerCamera').attr('scale', '0.3 0.3 0.3');
+        // ビッグライト
+        if (currentObject === 'box3' && !bigLightUsed) {
+          bigLightUsed = true;
+
+          // 部屋全体を拡大
+          $('#roomRoot').attr('scale', '1.8 1.8 1.8');
+
+          // 目線を低く（小人化）
+          $('#camera').attr('position', '0 0.5 -1');
         }
 
         $('#menu').attr('visible', false);
       });
 
+      // 戻る
       $('#btnBack').on('click', function () {
         $('#menu').attr('visible', false);
       });
