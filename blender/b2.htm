@@ -19,7 +19,6 @@
 
       <!-- ドラえもん -->
       <a-entity
-        id="box1"
         class="clickable"
         gltf-model="dora.glb"
         position="-1.2 1.1 -0.3"
@@ -27,39 +26,34 @@
         rotation="0 90 0">
       </a-entity>
 
-      <!-- しまってるどこでもドア（初期表示：true）-->
+      <!-- しまってるドア -->
       <a-entity
         id="closedDoor"
         class="clickable"
         gltf-model="../cdoor.glb"
         position="-0.7 1.3 -1.4"
         scale="0.5 0.5 0.5"
-        rotation="0 400 0"
         visible="true">
       </a-entity>
 
-      <!-- 開いてるどこでもドア（初期表示：false）-->
+      <!-- 開いてるドア -->
       <a-entity
         id="openDoor"
-        class="clickable"
         gltf-model="door.glb"
         position="-0.7 1.3 -1.4"
         scale="0.5 0.5 0.5"
-        rotation="0 220 0"
         visible="false">
       </a-entity>
-      
-      <!-- ドアの向こう側の景色（富士山） -->
-		<a-plane
-		  id="fujiPlane"
-		  src="../png/fuji.jpeg"
-		  position="-0.7 1.3 -1.5"
-		  width="0.7"
-		  height="1"
-		  rotation="0 0 0"
-		  visible="false">
-		</a-plane>
 
+      <!-- 富士山 -->
+      <a-plane
+        id="fujiPlane"
+        src="../png/fuji.jpeg"
+        position="-0.7 1.3 -1.5"
+        width="0.7"
+        height="1"
+        visible="false">
+      </a-plane>
 
       <!-- ビッグライト -->
       <a-entity
@@ -67,50 +61,46 @@
         class="clickable"
         gltf-model="b.glb"
         position="-0.3 0.9 -0.4"
-        scale="0.1 0.1 0.1"
-        rotation="0 0 0">
+        scale="0.1 0.1 0.1">
+
+        <!-- ライト（普段OFF） -->
+        <a-light
+          id="bigLightBeam"
+          type="spot"
+          intensity="2"
+          angle="25"
+          penumbra="0.3"
+          distance="5"
+          color="#FFF"
+          position="0 0 0.3"
+          visible="false">
+        </a-light>
       </a-entity>
 
-      <!-- UIパネル -->
+      <!-- UI -->
       <a-entity id="menu" visible="false" position="-0.3 1.3 -0.8">
         <a-plane color="#222" width="1.2" height="0.6" opacity="0.85"></a-plane>
 
-        <!-- タイトル -->
         <a-text id="menuTitle"
-                value=""
-                align="center"
-                position="0 0.20 0.05"
-                width="1.0"
-                color="#FFF">
+          align="center"
+          position="0 0.20 0.05"
+          width="1.0"
+          color="#FFF">
         </a-text>
 
-        <!-- 使用するボタン -->
         <a-entity position="-0.33 -0.12 0">
           <a-box id="btnUse" class="menuBtn"
-                 color="#4CAF50"
-                 depth="0.05" height="0.144" width="0.44">
-
-            <a-image src="../png/siyou.PNG"
-                     width="0.44"
-                     height="0.16"
-                     position="0 0 0.03">
-            </a-image>
-
+            color="#4CAF50"
+            depth="0.05" height="0.144" width="0.44">
+            <a-image src="../png/siyou.PNG" width="0.44" height="0.16" position="0 0 0.03"></a-image>
           </a-box>
         </a-entity>
 
-        <!-- 戻るボタン -->
         <a-entity position="0.33 -0.12 0">
           <a-box id="btnBack" class="menuBtn"
-                 color="#E53935"
-                 depth="0.05" height="0.144" width="0.44">
-
-            <a-image src="../png/modo.PNG"
-                     width="0.44"
-                     height="0.16"
-                     position="0 0 0.03">
-            </a-image>
-
+            color="#E53935"
+            depth="0.05" height="0.144" width="0.44">
+            <a-image src="../png/modo.PNG" width="0.44" height="0.16" position="0 0 0.03"></a-image>
           </a-box>
         </a-entity>
       </a-entity>
@@ -118,60 +108,68 @@
       <!-- カメラ -->
       <a-entity camera look-controls wasd-controls position="0 1.0 -1"></a-entity>
 
-      <!-- VRコントローラー -->
-      <a-entity id="ctlR" laser-controls="hand: right"
-                raycaster="objects: .clickable, .menuBtn; showLine: true;">
+      <!-- 右コントローラ -->
+      <a-entity
+        id="ctlR"
+        laser-controls="hand: right"
+        raycaster="objects: .clickable, .menuBtn; showLine: true;">
       </a-entity>
+
     </a-scene>
 
     <script>
       let currentObject = null;
+      let holdingBigLight = false;
 
-      // しまってるドア or ビッグライト → メニュー表示
+      // メニュー表示
       $('#closedDoor, #box3').on('click', function () {
         currentObject = this.id;
-
         $('#menuTitle').attr('value',
-          currentObject === 'closedDoor'
-            ? 'どこでもドア'
-            : 'ビッグライト'
+          currentObject === 'closedDoor' ? 'どこでもドア' : 'ビッグライト'
         );
-
         $('#menu').attr('visible', true);
       });
 
-      // 使用するボタン
+      // 使用する
       $('#btnUse').on('click', function () {
-        if (!currentObject) return;
 
-        // ▼▼ ドアの場合 ▼▼
+        // ドア
         if (currentObject === 'closedDoor') {
-          // 閉じたドアを消す
           $('#closedDoor').attr('visible', false);
-
-          // 開いたドアを表示
           $('#openDoor').attr('visible', true);
-          
-          // 富士山の画像を表示
-		  $('#fujiPlane').attr('visible', true);
-
-
-          // ここにワープ処理を追加してもOK！
-          // alert("どこでもドアを使用！");
+          $('#fujiPlane').attr('visible', true);
         }
 
-        // ▼▼ ビッグライトの場合 ▼▼
+        // ビッグライト
         if (currentObject === 'box3') {
-          alert("ビッグライトを使用！");
-          // 巨大化処理ここ
+          const light = document.querySelector('#box3');
+          const controller = document.querySelector('#ctlR');
+
+          controller.appendChild(light);
+
+          light.setAttribute('position', '0 -0.05 -0.1');
+          light.setAttribute('rotation', '-90 0 0');
+
+          holdingBigLight = true;
         }
 
         $('#menu').attr('visible', false);
       });
 
-      // 戻るボタン
+      // 戻る
       $('#btnBack').on('click', function () {
         $('#menu').attr('visible', false);
+      });
+
+      // トリガー長押し → ライトON
+      document.querySelector('#ctlR').addEventListener('triggerdown', () => {
+        if (!holdingBigLight) return;
+        document.querySelector('#bigLightBeam').setAttribute('visible', true);
+      });
+
+      // 離す → ライトOFF
+      document.querySelector('#ctlR').addEventListener('triggerup', () => {
+        document.querySelector('#bigLightBeam').setAttribute('visible', false);
       });
     </script>
   </body>
