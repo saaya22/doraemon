@@ -9,13 +9,28 @@
 
   <body>
     <a-scene
+      renderer="colorManagement: true; physicallyCorrectLights: true"
+      background="color: #ECECEC"
       vr-mode-ui="enabled: true"
       cursor="rayOrigin: mouse"
-      raycaster="objects: .clickable"
-    >
+      raycaster="objects: .clickable">
+
+      <!-- ===== ライト（超重要：初期白黒防止） ===== -->
+      <a-light type="ambient" intensity="0.7"></a-light>
+
+      <a-light
+        type="directional"
+        intensity="0.9"
+        position="1 3 2">
+      </a-light>
+      <!-- =========================================== -->
 
       <!-- 部屋 -->
-      <a-entity gltf-model="heya_new.glb" position="0 1.5 -0.5" scale="1.2 1.2 1.2"></a-entity>
+      <a-entity
+        gltf-model="heya_new.glb"
+        position="0 1.5 -0.5"
+        scale="1.2 1.2 1.2">
+      </a-entity>
 
       <!-- ドラえもん -->
       <a-entity
@@ -26,7 +41,7 @@
         rotation="0 90 0">
       </a-entity>
 
-      <!-- しまってるドア -->
+      <!-- 閉じたどこでもドア -->
       <a-entity
         id="closedDoor"
         class="clickable"
@@ -36,7 +51,7 @@
         visible="true">
       </a-entity>
 
-      <!-- 開いてるドア -->
+      <!-- 開いたどこでもドア -->
       <a-entity
         id="openDoor"
         gltf-model="door.glb"
@@ -63,15 +78,15 @@
         position="-0.3 0.9 -0.4"
         scale="0.1 0.1 0.1">
 
-        <!-- ライト（普段OFF） -->
+        <!-- ライト（演出用：最初OFF） -->
         <a-light
           id="bigLightBeam"
           type="spot"
-          intensity="2"
-          angle="25"
-          penumbra="0.3"
-          distance="5"
-          color="#FFF"
+          intensity="1"
+          angle="20"
+          penumbra="0.4"
+          distance="4"
+          color="#ffffff"
           position="0 0 0.3"
           visible="false">
         </a-light>
@@ -81,7 +96,8 @@
       <a-entity id="menu" visible="false" position="-0.3 1.3 -0.8">
         <a-plane color="#222" width="1.2" height="0.6" opacity="0.85"></a-plane>
 
-        <a-text id="menuTitle"
+        <a-text
+          id="menuTitle"
           align="center"
           position="0 0.20 0.05"
           width="1.0"
@@ -92,7 +108,9 @@
           <a-box id="btnUse" class="menuBtn"
             color="#4CAF50"
             depth="0.05" height="0.144" width="0.44">
-            <a-image src="../png/siyou.PNG" width="0.44" height="0.16" position="0 0 0.03"></a-image>
+            <a-image src="../png/siyou.PNG"
+              width="0.44" height="0.16" position="0 0 0.03">
+            </a-image>
           </a-box>
         </a-entity>
 
@@ -100,7 +118,9 @@
           <a-box id="btnBack" class="menuBtn"
             color="#E53935"
             depth="0.05" height="0.144" width="0.44">
-            <a-image src="../png/modo.PNG" width="0.44" height="0.16" position="0 0 0.03"></a-image>
+            <a-image src="../png/modo.PNG"
+              width="0.44" height="0.16" position="0 0 0.03">
+            </a-image>
           </a-box>
         </a-entity>
       </a-entity>
@@ -121,32 +141,28 @@
       let currentObject = null;
       let holdingBigLight = false;
 
-      // メニュー表示
       $('#closedDoor, #box3').on('click', function () {
         currentObject = this.id;
-        $('#menuTitle').attr('value',
+        $('#menuTitle').attr(
+          'value',
           currentObject === 'closedDoor' ? 'どこでもドア' : 'ビッグライト'
         );
         $('#menu').attr('visible', true);
       });
 
-      // 使用する
       $('#btnUse').on('click', function () {
 
-        // ドア
         if (currentObject === 'closedDoor') {
           $('#closedDoor').attr('visible', false);
           $('#openDoor').attr('visible', true);
           $('#fujiPlane').attr('visible', true);
         }
 
-        // ビッグライト
         if (currentObject === 'box3') {
           const light = document.querySelector('#box3');
           const controller = document.querySelector('#ctlR');
 
           controller.appendChild(light);
-
           light.setAttribute('position', '0 -0.05 -0.1');
           light.setAttribute('rotation', '-90 0 0');
 
@@ -156,18 +172,15 @@
         $('#menu').attr('visible', false);
       });
 
-      // 戻る
       $('#btnBack').on('click', function () {
         $('#menu').attr('visible', false);
       });
 
-      // トリガー長押し → ライトON
       document.querySelector('#ctlR').addEventListener('triggerdown', () => {
         if (!holdingBigLight) return;
         document.querySelector('#bigLightBeam').setAttribute('visible', true);
       });
 
-      // 離す → ライトOFF
       document.querySelector('#ctlR').addEventListener('triggerup', () => {
         document.querySelector('#bigLightBeam').setAttribute('visible', false);
       });
