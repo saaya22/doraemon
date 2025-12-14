@@ -134,12 +134,21 @@
         look-controls
         wasd-controls
         position="0 1.0 -1">
+        
+        <a-plane
+	    id="flash"
+	    color="#FFFFFF"
+	    width="2"
+	    height="2"
+	    position="0 0 -0.5"
+	    visible="false">
+	  </a-plane>
       </a-entity>
 
       <!-- VRコントローラ -->
       <a-entity
       	id="rightHand"
-        laser-controls="hand: right; model: false"
+        laser-controls="hand: right"
         raycaster="objects: .clickable, .menuBtn; showLine: true">
       </a-entity>
 
@@ -176,37 +185,42 @@
         }
 
         // ビッグライト
-		if (currentObject === 'box3' && !bigLightUsed) {
-		  bigLightUsed = true;
+if (currentObject === 'box3' && !bigLightUsed) {
+  bigLightUsed = true;
 
-		  const scale = 1.8;
+  // ===== フラッシュ表示 =====
+  const flash = document.querySelector('#flash');
+  flash.setAttribute('visible', true);
 
-		  // 部屋を巨大化
-		  $('#roomRoot').attr('scale', `${scale} ${scale} ${scale}`);
+  // 0.15秒後に消す
+  setTimeout(() => {
+    flash.setAttribute('visible', false);
+  }, 150);
 
-		  /*
-		    原点補正：
-		    ・拡大率が 1 → 1.8（+0.8）
-		    ・床の基準高さ ≒ 0.6
-		    ・持ち上がる分を下げて相殺
-		  */
-		  const floorBaseY = 0.6;
-		  const offsetY = -(scale - 1) * floorBaseY;
+  // ===== フラッシュ後に巨大化 =====
+  setTimeout(() => {
+    const scale = 1.8;
 
-		  $('#roomRoot').attr('position', `0 ${offsetY} 0`);
-		  
-		  // ===== ★ ビッグライトを手に持たせる =====
-		  const bigLight = document.querySelector('#box3');
-		  const hand = document.querySelector('#rightHand');
+    // 部屋を巨大化
+    $('#roomRoot').attr('scale', `${scale} ${scale} ${scale}`);
 
-		  // コントローラの子要素にする
-		  hand.appendChild(bigLight);
+    // 床補正
+    const floorBaseY = 0.6;
+    const offsetY = -(scale - 1) * floorBaseY;
+    $('#roomRoot').attr('position', `0 ${offsetY} 0`);
 
-		  // 手持ち用の位置・回転に調整
-		  bigLight.setAttribute('position', '0 -0.05 -0.1');
-		  bigLight.setAttribute('rotation', '0 180 0');
-		  bigLight.setAttribute('scale', '0.15 0.15 0.15');
-		}
+    // ===== ビッグライトを手に持たせる =====
+    const bigLight = document.querySelector('#box3');
+    const hand = document.querySelector('#rightHand');
+
+    hand.appendChild(bigLight);
+    bigLight.setAttribute('position', '0 -0.05 -0.1');
+    bigLight.setAttribute('rotation', '0 180 0');
+    bigLight.setAttribute('scale', '0.15 0.15 0.15');
+
+  }, 180); // フラッシュ直後
+}
+
 
         $('#menu').attr('visible', false);
       });
