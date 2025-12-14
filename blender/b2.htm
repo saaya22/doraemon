@@ -138,6 +138,7 @@
 
       <!-- VRコントローラ -->
       <a-entity
+      	id="rightHand"
         laser-controls="hand: right"
         raycaster="objects: .clickable, .menuBtn; showLine: true">
       </a-entity>
@@ -193,6 +194,18 @@
 		  const offsetY = -(scale - 1) * floorBaseY;
 
 		  $('#roomRoot').attr('position', `0 ${offsetY} 0`);
+		  
+		  // ===== ★ ビッグライトを手に持たせる =====
+		  const bigLight = document.querySelector('#box3');
+		  const hand = document.querySelector('#rightHand');
+
+		  // コントローラの子要素にする
+		  hand.appendChild(bigLight);
+
+		  // 手持ち用の位置・回転に調整
+		  bigLight.setAttribute('position', '0 -0.05 -0.1');
+		  bigLight.setAttribute('rotation', '0 180 0');
+		  bigLight.setAttribute('scale', '0.15 0.15 0.15');
 		}
 
         $('#menu').attr('visible', false);
