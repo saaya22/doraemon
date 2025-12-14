@@ -175,17 +175,25 @@
         }
 
         // ビッグライト
-        if (currentObject === 'box3' && !bigLightUsed) {
-          bigLightUsed = true;
+		if (currentObject === 'box3' && !bigLightUsed) {
+		  bigLightUsed = true;
 
-          // 部屋全体を拡大
-          $('#roomRoot').attr('scale', '1.8 1.8 1.8');
-          
-          // 目線を高く
-      	  $('#camera').attr('position', '0 5.0 -1');
+		  const scale = 1.8;
 
+		  // 部屋を巨大化
+		  $('#roomRoot').attr('scale', `${scale} ${scale} ${scale}`);
 
-        }
+		  /*
+		    原点補正：
+		    ・拡大率が 1 → 1.8（+0.8）
+		    ・床の基準高さ ≒ 0.6
+		    ・持ち上がる分を下げて相殺
+		  */
+		  const floorBaseY = 0.6;
+		  const offsetY = -(scale - 1) * floorBaseY;
+
+		  $('#roomRoot').attr('position', `0 ${offsetY} 0`);
+		}
 
         $('#menu').attr('visible', false);
       });
