@@ -34,7 +34,28 @@
           rotation="0 90 0">
         </a-entity>
 
+        <!-- 閉じたどこでもドア -->
         
+        
+        <a-entity
+          id="closedDoor"
+          class="clickable"
+          gltf-model="../door.glb"
+          position="-1.0 1.25 -1.5"
+          scale="0.5 0.5 0.5"
+          rotation="0 400 0"
+          visible="true">
+        </a-entity>
+        
+        <a-plane
+          id="fujiPlane"
+          src="../png/fuji.jpeg"
+          position="-1.1 1.25 -1.65"
+          rotation="0 15 0"
+          width="0.6"
+          height="1.1"
+          visible="false">
+        </a-plane>
 
         <!-- 開いたどこでもドア -->
         <a-entity
@@ -46,6 +67,8 @@
           rotation="0 220 0"
           visible="false">
         </a-entity>
+        
+        
 
         <!-- ドアの向こう（富士山） -->
         <a-plane
