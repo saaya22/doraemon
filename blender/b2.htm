@@ -11,8 +11,12 @@
     <a-scene
       vr-mode-ui="enabled: true"
       cursor="rayOrigin: mouse"
-      raycaster="objects: .clickable, .menuBtn"
-    >
+      raycaster="objects: .clickable, .menuBtn">
+
+      <!-- ===== 音声アセット ===== -->
+      <a-assets>
+        <audio id="doraVoice" src="../dora.m4a" preload="auto"></audio>
+      </a-assets>
 
       <!-- ===== 部屋全体の親（ビッグライト用） ===== -->
       <a-entity id="roomRoot" scale="1 1 1">
@@ -44,8 +48,6 @@
           rotation="0 400 0"
           visible="true">
         </a-entity>
-        
-       
 
         <!-- 開いたどこでもドア -->
         <a-entity
@@ -57,13 +59,12 @@
           rotation="0 220 0"
           visible="false">
         </a-entity>
-        
 
         <!-- ドアの向こう（富士山） -->
         <a-plane
           id="fujiPlane"
           src="../png/fuji.jpeg"
-          position="-1.1 1.25 -1.65
+          position="-1.1 1.25 -1.65"
           rotation="0 15 0"
           width="0.6"
           height="1.1"
@@ -131,27 +132,28 @@
         </a-entity>
       </a-entity>
 
-      <!-- ===== カメラ ===== -->
+      <!-- ===== カメラ（音声付き） ===== -->
       <a-entity
         id="camera"
         camera
         look-controls
         wasd-controls
-        position="0 1.0 -1">
-        
+        position="0 1.0 -1"
+        sound="src: #doraVoice; autoplay: false; loop: false; volume: 1">
+
         <a-plane
-	    id="flash"
-	    color="#FFFFFF"
-	    width="5"
-	    height="10"
-	    position="0 -2 -0.5"
-	    visible="false">
-	  </a-plane>
+          id="flash"
+          color="#FFFFFF"
+          width="5"
+          height="10"
+          position="0 -2 -0.5"
+          visible="false">
+        </a-plane>
       </a-entity>
 
       <!-- VRコントローラ -->
       <a-entity
-      	id="rightHand"
+        id="rightHand"
         laser-controls="hand: right"
         raycaster="objects: .clickable, .menuBtn; showLine: true">
       </a-entity>
@@ -189,42 +191,34 @@
         }
 
         // ビッグライト
-if (currentObject === 'box3' && !bigLightUsed) {
-  bigLightUsed = true;
+        if (currentObject === 'box3' && !bigLightUsed) {
+          bigLightUsed = true;
 
-  // ===== フラッシュ表示 =====
-  const flash = document.querySelector('#flash');
-  flash.setAttribute('visible', true);
+          const flash = document.querySelector('#flash');
+          flash.setAttribute('visible', true);
 
-  // 0.3秒後に消す
-  setTimeout(() => {
-    flash.setAttribute('visible', false);
-  }, 300);
+          setTimeout(() => {
+            flash.setAttribute('visible', false);
+          }, 300);
 
-  // ===== フラッシュ後に巨大化 =====
-  setTimeout(() => {
-    const scale = 1.8;
+          setTimeout(() => {
+            const scale = 1.8;
 
-    // 部屋を巨大化
-    $('#roomRoot').attr('scale', `${scale} ${scale} ${scale}`);
+            $('#roomRoot').attr('scale', `${scale} ${scale} ${scale}`);
 
-    // 床補正
-    const floorBaseY = 0.6;
-    const offsetY = -(scale - 1) * floorBaseY;
-    $('#roomRoot').attr('position', `0 ${offsetY} 0`);
+            const floorBaseY = 0.6;
+            const offsetY = -(scale - 1) * floorBaseY;
+            $('#roomRoot').attr('position', `0 ${offsetY} 0`);
 
-    // ===== ビッグライトを手に持たせる =====
-    const bigLight = document.querySelector('#box3');
-    const hand = document.querySelector('#rightHand');
+            const bigLight = document.querySelector('#box3');
+            const hand = document.querySelector('#rightHand');
 
-    hand.appendChild(bigLight);
-    bigLight.setAttribute('position', '0 -0.05 -0.1');
-    bigLight.setAttribute('rotation', '0 180 0');
-    bigLight.setAttribute('scale', '0.15 0.15 0.15');
-
-  }, 180); // フラッシュ直後
-}
-
+            hand.appendChild(bigLight);
+            bigLight.setAttribute('position', '0 -0.05 -0.1');
+            bigLight.setAttribute('rotation', '0 180 0');
+            bigLight.setAttribute('scale', '0.15 0.15 0.15');
+          }, 180);
+        }
 
         $('#menu').attr('visible', false);
       });
@@ -232,6 +226,14 @@ if (currentObject === 'box3' && !bigLightUsed) {
       // 戻る
       $('#btnBack').on('click', function () {
         $('#menu').attr('visible', false);
+      });
+
+      // ===== VRに入った瞬間に音声再生 =====
+      const scene = document.querySelector('a-scene');
+      const camera = document.querySelector('#camera');
+
+      scene.addEventListener('enter-vr', () => {
+        camera.components.sound.playSound();
       });
     </script>
   </body>
