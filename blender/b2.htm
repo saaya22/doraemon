@@ -16,6 +16,7 @@
       <!-- ===== 音声アセット ===== -->
       <a-assets>
         <audio id="doraVoice" src="../dora.m4a" preload="auto"></audio>
+      	<audio id="himitsuSound" src="himitsu.wav" preload="auto"></audio>
       </a-assets>
 
       <!-- ===== 部屋全体の親（ビッグライト用） ===== -->
@@ -141,6 +142,13 @@
         position="0 1.0 -1"
         sound="src: #doraVoice; autoplay: false; loop: false; volume: 1">
 
+		 <!-- メニュー効果音用 -->
+	  <a-entity
+	    id="himitsuPlayer"
+	    sound="src: #himitsuSound; autoplay: false; loop: false; volume: 0.8">
+	  </a-entity>
+
+ 
         <a-plane
           id="flash"
           color="#FFFFFF"
@@ -167,17 +175,23 @@
 
       // オブジェクトクリック → メニュー表示
       $('#closedDoor, #box3').on('click', function () {
-        currentObject = this.id;
+	  currentObject = this.id;
 
-        $('#menuTitle').attr(
-          'value',
-          currentObject === 'closedDoor'
-            ? 'どこでもドア'
-            : 'ビッグライト'
-        );
+	  $('#menuTitle').attr(
+	    'value',
+	    currentObject === 'closedDoor'
+	      ? 'どこでもドア'
+	      : 'ビッグライト'
+	  );
 
-        $('#menu').attr('visible', true);
-      });
+	  $('#menu').attr('visible', true);
+
+	  // ===== 秘密道具っぽい効果音 =====
+	  const himitsu = document.querySelector('#himitsuPlayer');
+	  himitsu.components.sound.stopSound(); // 連打対策
+	  himitsu.components.sound.playSound();
+	});
+
 
       // 使用する
       $('#btnUse').on('click', function () {
